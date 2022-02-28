@@ -14,6 +14,7 @@ public class Projectile
     //-------------------------------------------------------
     public final int HEIGHT = 5;
     public final int WIDTH = 5;
+    public final int MAX_VELOCITY = 10;
 
     //Instance Variables
     //-------------------------------------------------------
@@ -28,6 +29,13 @@ public class Projectile
     public Projectile()  
     {
         frozen = true;  //Start NOT in motion (frozen).
+    }
+
+    public Projectile(double dir)  
+    {
+        frozen = true;  //Start NOT in motion (frozen).
+        xVel = (int) (MAX_VELOCITY * Math.cos(dir));
+        yVel = (int) (MAX_VELOCITY * Math.sin(dir));
     }
     
     //Accessors
@@ -62,9 +70,28 @@ public class Projectile
         //Initialize this projectile based on starting location to move upwards.
         x=startX;
         y=startY;
-        xVel=0;
-        yVel=-3;
         frozen=false;
+    }
+
+    public void fireWeapon(int startX, int startY, double dir)
+    {
+        //Initialize this projectile based on starting location to move upwards.
+        x=startX;
+        y=startY;
+        frozen=false;
+        xVel = (int) (MAX_VELOCITY * Math.cos(dir));
+        yVel = (int) (MAX_VELOCITY * Math.sin(dir));
+    }
+
+    public void fireWeapon(int startX, int startY, int endX, int endY)
+    {
+        //Initialize this projectile based on starting location to move upwards.
+        x=startX;
+        y=startY;
+        frozen=false;
+        double dir = Math.atan2(endY-startY, endX-startX);
+        xVel = (int) (MAX_VELOCITY * Math.cos(dir));
+        yVel = (int) (MAX_VELOCITY * Math.sin(dir));
     }
     
 }  //end of Projectile class

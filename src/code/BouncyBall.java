@@ -40,6 +40,19 @@ public class BouncyBall
 
         radius = randy.nextInt(4)*10+20; //could be 20,30,40,50
     }
+
+    public BouncyBall(Color c)  
+    {
+        //Initialize the instance variables...  
+        Random randy = new Random();
+        x = randy.nextInt(300);     //Start near the middle of the width.
+        y = randy.nextInt(200);     //Start near the middle.
+        xVel = randy.nextInt(9)-4;  //Choose a random starting velocity
+        yVel = 0;
+
+        radius = randy.nextInt(4)*10+20; //could be 20,30,40,50
+        color = c;
+    }
     
     //Accessors
     //-------------------------------------------------------

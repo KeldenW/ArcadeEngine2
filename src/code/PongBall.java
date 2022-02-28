@@ -125,6 +125,11 @@ public class PongBall
                 yVel=-yVel; //change directions at the walls
         }
     }
+
+    public void nudgeTowards(int xn, int yn) {
+        xVel = (int)(( xn - x ) / 7);
+        yVel = (int)(( yn - y ) / 7);
+    }
         
 }  //end of PongBall class
 

@@ -16,7 +16,10 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javax.sound.sampled.Clip;
+import javax.swing.plaf.ColorUIResource;
 
 import java.awt.geom.Rectangle2D;
 
@@ -29,16 +32,23 @@ public class ArcadeDemo extends AnimationPanel
     //Instance Variables
     //-------------------------------------------------------
     PongBall ball = new PongBall();
+    BouncyBall blue = new BouncyBall();
     BouncyBall bouncer = new BouncyBall();
     ArrayList<Projectile> laserArray = new ArrayList<Projectile>();
     boolean zPressed;
+    Random r = new Random();
+    ArrayList<BouncyBall> bouncers = new ArrayList<BouncyBall>();
+    ArrayList<PongBall> poggers = new ArrayList<PongBall>();
+    int[] rectDim = {220, 120, 50, 50};
 
     //Constructor
     //-------------------------------------------------------
     public ArcadeDemo()
     {   //Enter the name and width and height.  
         super("ArcadeDemo", 640, 480);
-        zPressed = false;        
+        zPressed = false;  
+        blue.setColor(Color.BLUE);      
+        poggers.add(ball);
     }
        
     //The renderFrame method is the one which is called each time a frame is drawn.
@@ -46,6 +56,18 @@ public class ArcadeDemo extends AnimationPanel
     protected void renderFrame(Graphics g)
     {
         g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+
+        //Draw a square that is stationary on the screen.
+        g.setColor(Color.BLUE);
+        if ((rectDim[2] + frameNumber + rectDim[0] < getWidth()) && (rectDim[3] + frameNumber + rectDim[1] < getHeight())) {
+            g.fillRect(rectDim[0], rectDim[1], rectDim[2]+frameNumber, rectDim[3]+frameNumber);
+        } else {
+            if (getWidth() - rectDim[0] > getHeight() - rectDim[1]) {
+                g.fillRect(rectDim[0], rectDim[1], rectDim[2] + getHeight() - rectDim[1], getHeight() - rectDim[1]);
+            }
+        }
+        
+
         //Draw a circle that follows the mouse.
         g.setColor(Color.BLACK);
         g.fillOval(mouseX-10, mouseY-10, 20,20);
@@ -53,6 +75,10 @@ public class ArcadeDemo extends AnimationPanel
         //Draw a ball that bounces around the screen.
         g.drawImage(ballImage,ball.getX(),ball.getY(),this);
         ball.animate();
+
+        //Draw a blue ball with gravity! 
+        blue.animate(g.getClipBounds());
+        blue.draw(g);
         
         //Draw a ball with gravity! 
         bouncer.animate(g.getClipBounds());
@@ -65,6 +91,16 @@ public class ArcadeDemo extends AnimationPanel
             g.setColor(Color.RED);
             g.fillRect(p.getX(), p.getY(), 5,15);
             p.animate();   
+        }
+
+        // for(PongBall pb: poggers) { 
+        //     g.drawImage(ballImage,pb.getX(),pb.getY(),this);
+        //     pb.animate();
+        // }
+
+        for (BouncyBall b: bouncers) {
+            b.animate(g.getClipBounds());
+            b.draw(g);
         }
 
         for (int i = 0; i < laserArray.size(); i++) {
@@ -87,6 +123,18 @@ public class ArcadeDemo extends AnimationPanel
         if (ball.getRect().contains(new Point(super.mouseX, super.mouseY)))
             g.drawChars(COLLISION, 0, 9, 100, 150);
         
+        g.drawString(String.valueOf(laserArray.size()), 100, 200);
+
+        if (super.frameNumber % 1 == 0) {
+            bouncers.add(new BouncyBall(new ColorUIResource(r.nextFloat(), r.nextFloat(), r.nextFloat())));
+        }
+
+        if (frameNumber % 10 == 0) {
+            Projectile tempstar = new Projectile();
+            tempstar.fireWeapon(ball.getX(),ball.getY(),mouseX,mouseY);           
+            laserArray.add(tempstar); 
+        }
+        
     }//--end of renderFrame method--
     
     //-------------------------------------------------------
@@ -95,6 +143,7 @@ public class ArcadeDemo extends AnimationPanel
     public void mouseClicked(MouseEvent e)  
     { 
         ball.setFrozen(!ball.isFrozen()); //Toggle the ball's frozen status.
+        laserArray.clear();
     }
     
     //-------------------------------------------------------
@@ -120,11 +169,18 @@ public class ArcadeDemo extends AnimationPanel
             ball.increaseSpeed();
         if(c=='s' || c=='S')
             ball.decreaseSpeed();
+        if(c=='x' || c=='X') {
+            for (int i = 0; i < poggers.size(); i++) {
+                poggers.get(i).nudgeTowards(mouseX, mouseY);
+
+            }
+        }
+
             
         if(c==' ') //Fire a projectile when spacebar pressed.  
         {
             Projectile tempstar = new Projectile();
-            tempstar.fireWeapon(mouseX,mouseY);           
+            tempstar.fireWeapon(mouseX,mouseY,r.nextDouble()*2*Math.PI);           
             laserArray.add(tempstar);            
         }
     }
