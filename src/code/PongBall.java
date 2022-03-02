@@ -2,6 +2,14 @@ package code;
 
 
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 /*
  * Code for a generic PongBall that bounces around the screen.
@@ -120,9 +128,29 @@ public class PongBall
             x+=xVel;
             if (x > 640-BALL_WIDTH || x < 0) 
                 xVel=-xVel; //change directions at the walls
+                
             y+=yVel;
             if (y > 480-BALL_HEIGHT || y < 0) 
                 yVel=-yVel; //change directions at the walls
+        }
+    }
+
+    // code below obtained from stackOverflow by user: Andrew Jenkens, and Sebastian
+    private void playSound(String soundFile) {
+        File f = new File("src/audio/" + soundFile);
+        AudioInputStream audioIn;
+        try {
+            audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+        } catch (UnsupportedAudioFileException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }  
+        try (Clip clip = AudioSystem.getClip()) {
+            clip.open(audioIn);
+            clip.start();
+        } catch (LineUnavailableException | IOException | NullPointerException i) {
+            // TODO Auto-generated catch block
+            i.printStackTrace();
         }
     }
 

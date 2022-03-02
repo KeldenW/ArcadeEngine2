@@ -23,6 +23,7 @@ public class Projectile
     private int xVel;   //The horizontal velocity of the projectile.        
     private int yVel;   //The vertical velocity of the projectile.
     private boolean frozen; //Is this projectile frozen (can't move?)
+    private int keep;
     
     //Constructor
     //-------------------------------------------------------
@@ -37,12 +38,21 @@ public class Projectile
         xVel = (int) (MAX_VELOCITY * Math.cos(dir));
         yVel = (int) (MAX_VELOCITY * Math.sin(dir));
     }
+
+    public Projectile(double dir, int in)  
+    {
+        keep = in;
+        frozen = true;  //Start NOT in motion (frozen).
+        xVel = (int) (MAX_VELOCITY * Math.cos(dir));
+        yVel = (int) (MAX_VELOCITY * Math.sin(dir));
+    }
     
     //Accessors
     //-------------------------------------------------------
     public int getX() {return x;}
     public int getY() {return y;}
     public boolean isFrozen() {return frozen;}
+    public int getKeep() {return keep;};
     
     //Modifiers
     //-------------------------------------------------------
