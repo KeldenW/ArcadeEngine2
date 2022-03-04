@@ -135,25 +135,6 @@ public class PongBall
         }
     }
 
-    // code below obtained from stackOverflow by user: Andrew Jenkens, and Sebastian
-    private void playSound(String soundFile) {
-        File f = new File("src/audio/" + soundFile);
-        AudioInputStream audioIn;
-        try {
-            audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
-        } catch (UnsupportedAudioFileException | IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }  
-        try (Clip clip = AudioSystem.getClip()) {
-            clip.open(audioIn);
-            clip.start();
-        } catch (LineUnavailableException | IOException | NullPointerException i) {
-            // TODO Auto-generated catch block
-            i.printStackTrace();
-        }
-    }
-
     public void nudgeTowards(int xn, int yn) {
         xVel = (int)(( xn - x ) / 7);
         yVel = (int)(( yn - y ) / 7);

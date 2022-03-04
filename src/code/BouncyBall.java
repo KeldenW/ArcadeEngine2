@@ -24,6 +24,7 @@ public class BouncyBall
     private double y;  //The vertical Y position of the (top of the) ball  
     private double xVel;   //The horizontal velocity of the ball.        
     private double yVel;   //The vertical velocity of the ball.
+    private double g = 1; // the acceleration due to gravity
     private int radius;  //The radius of the ball.  
     private Color color = Color.RED;
         
@@ -62,12 +63,14 @@ public class BouncyBall
     public int getSize() {return radius; }
     public Rectangle getBounds() { return new Rectangle((int)x,(int)y,radius,radius); }
     public Color getColor() {return color;}
+    public double getG() {return g;}
     
     //Modifiers
     //-------------------------------------------------------
     public void setX(int in) {x=in;}
     public void setY(int in) {y=in;}
     public void setColor(Color in) {color = in;}
+    public void setGravity(double in) {g = in;}
     
     /**
      * This method determines whether this BouncyBall intersects another.  
@@ -96,7 +99,7 @@ public class BouncyBall
                 xVel=-xVel;
             } 
             
-            yVel++; //change in velocity is acceleration due to gravity!
+            yVel += g; //change in velocity is acceleration due to gravity!
             y+=yVel;
             if (y > screenBounds.getMaxY()-radius || y < screenBounds.getMinY()) 
             { 
@@ -106,6 +109,7 @@ public class BouncyBall
                 yVel=-yVel; //change directions at the walls
             } 
     }
+
     
     /**
      * Draw the object to the screen.  This allows the class to be in charge of 

@@ -13,6 +13,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
@@ -45,6 +46,7 @@ public class ArcadeDemo extends AnimationPanel
     int redAmm = 0;
     int lastX;
     int lastY;
+    double grav = 1;
     
     ArrayList<Image> images = new ArrayList<Image>();
     //Constructor
@@ -109,7 +111,7 @@ public class ArcadeDemo extends AnimationPanel
         }
 
         for (Projectile creature: creatureArray) {
-            g.drawImage(images.get(creature.getK), creature.getX(), creature.getY(), this);
+            g.drawImage(images.get(creature.getKeep()), creature.getX(), creature.getY(), this);
             creature.animate();
         }
 
@@ -117,6 +119,17 @@ public class ArcadeDemo extends AnimationPanel
         //     g.drawImage(ballImage,pb.getX(),pb.getY(),this);
         //     pb.animate();
         // }
+
+        for (int idx = 0; idx < bouncers.size(); idx++) {
+            if (bouncers.size() > 0) {
+                for (Projectile p: laserArray) {
+                        if (bouncers.get(idx).getBounds().contains(p.getRect())){
+                            bouncers.remove(idx);
+                        }
+                }
+                bouncers.get(idx).setGravity(grav);
+            }
+        }
 
         for (BouncyBall b: bouncers) {
             b.animate(g.getClipBounds());
@@ -164,6 +177,20 @@ public class ArcadeDemo extends AnimationPanel
             tempstar.fireWeapon(ball.getX(),ball.getY(),mouseX,mouseY);           
             laserArray.add(tempstar); 
         }
+
+        if (ball.getX() > 640-ball.BALL_WIDTH || ball.getX() < 0) {
+            bounce.setFramePosition(0);
+            bounce.loop(0);
+        }    
+        
+        if (ball.getY() > 480-ball.BALL_HEIGHT || ball.getY() < 0) {
+            bounce.setFramePosition(0);
+            bounce.loop(0);
+        }
+        Font myFont = new Font("TimesRoman", Font.PLAIN, 30);
+        String scroll = "Number 24! Number 24! ";
+        g.setFont(myFont);
+        g.drawString(scroll.substring((frameNumber / 10) % 10, ((frameNumber / 10) % 10 + 10)), 100, 175);
         
     }//--end of renderFrame method--
     
@@ -171,7 +198,9 @@ public class ArcadeDemo extends AnimationPanel
     //Respond to Mouse Events
     //-------------------------------------------------------
     public void mouseClicked(MouseEvent e)  
-    { 
+    {
+        if (new Rectangle(rectDim[0], rectDim[1], rectDim[2]+frameNumber, rectDim[3]+frameNumber).contains(new Point(mouseX, mouseY)))
+            grav = grav * -1.0;
         ball.setFrozen(!ball.isFrozen()); //Toggle the ball's frozen status.
         laserArray.clear();
     }
@@ -282,11 +311,26 @@ public class ArcadeDemo extends AnimationPanel
 //-----------------------------------------------------------------------*/
     Clip themeMusic;
     Clip bellSound;
+    Clip bounce;
     
     public void initMusic() 
     {
-        themeMusic = loadClip("src/audio/under.wav");
+        themeMusic = loadClip("src/audio/Arcade-game-background-music.wav");
         bellSound = loadClip("src/audio/ding.wav");
+        bounce = loadClip("src/audio/bounce.wav");
+        int dx = new Random().nextInt(3);
+        switch (dx) {
+            case 0:
+                themeMusic = loadClip("src/audio/bounce.wav");
+                break;
+            case 1:
+                themeMusic = loadClip("src/audio/give.wav");
+                break;
+            case 2:
+                themeMusic = loadClip("src/audio/halo.wav");
+                break;
+
+        }
         if(themeMusic != null)
 //            themeMusic.start(); //This would make it play once!
             themeMusic.loop(2); //This would make it loop 2 times.
