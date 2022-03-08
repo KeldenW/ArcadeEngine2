@@ -172,7 +172,7 @@ public class ArcadeDemo extends AnimationPanel
             bouncers.add(new BouncyBall(new ColorUIResource(r.nextFloat(), r.nextFloat(), r.nextFloat())));
         }
 
-        if (frameNumber % 10 == 0) {
+        if (frameNumber % 5 == 0) {
             Projectile tempstar = new Projectile();
             tempstar.fireWeapon(ball.getX(),ball.getY(),mouseX,mouseY);           
             laserArray.add(tempstar); 

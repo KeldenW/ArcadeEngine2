@@ -11,12 +11,12 @@ package code;
 import java.awt.event.*;
 import javax.swing.JFrame;
 
-public class ArcadeRunner 
+public class ArcadeRunner
 {
 
     int FPS = 60;   //Frames per second (animation speed)
-    AnimationPanel world = new ArcadeDemo();
-    
+    // AnimationPanel world = new ArcadeDemo();
+    AnimationPanel world = new Lol();
     
     
     //==============================================================================
