@@ -187,6 +187,7 @@ public class ArcadeDemo extends AnimationPanel
             bounce.setFramePosition(0);
             bounce.loop(0);
         }
+        
         Font myFont = new Font("TimesRoman", Font.PLAIN, 30);
         String scroll = "Number 24! Number 24! ";
         g.setFont(myFont);

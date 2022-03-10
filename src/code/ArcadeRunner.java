@@ -15,8 +15,8 @@ public class ArcadeRunner
 {
 
     int FPS = 60;   //Frames per second (animation speed)
-    // AnimationPanel world = new ArcadeDemo();
-    AnimationPanel world = new Lol();
+    AnimationPanel world = new ArcadeDemo();
+    // AnimationPanel world = new Lol();
     
     
     //==============================================================================
